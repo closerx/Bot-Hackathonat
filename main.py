@@ -12,6 +12,7 @@ TARGET_CHANNELS = ["Haymant2030", "urpath_uni", "hakathonat", "Sudie2030KSA"]
 
 # مدة الانتظار بالثواني (3600 ثانية = 1 ساعة)
 FETCH_INTERVAL = 3600
+mytime=5*60
 my_session="AQDhQksAvouTovJfShP4wdY-Qu1D6aVq0F1vLZO8MRJRHO6gTw1B1de3c9FqyLpU9KFkUA_cQmwhNaEB80ey2ijty29gmAEk0ELNPjPZr7r8HQIc9ZZ7lwTIzOn--HiGMgQ0qglTf7FKmxjmpCCzgObnsz0QOCkNKpmyUYblMcEm18rmN6M4B7u2sKSUIBJ5f1zVINE_S-1kQBg-bdKPS3m4Yx4DxeiF6iYCknBFdwSw_SFdQbuWQZ8NtdQBHLgUsa92qWe-UmBH7reCImMw7qzsoRgx8XUpGBLeWok3Nnh8j_hDGaA-MLasUA_XmNNC5m4muml_kUQS02xYrxwStoR3GchduAAAAABUTfzIAA"
 
 app = Client("my_tele_session", api_id=API_ID, api_hash=API_HASH, session_string=my_session)
@@ -85,7 +86,7 @@ async def worker():
             print(f"❌ حدث خطأ غير متوقع أثناء الدورة: {e}")
 
         print(f"⏳ سيكرر الكود الفحص بعد {FETCH_INTERVAL // 60} دقيقة...")
-        await asyncio.sleep(FETCH_INTERVAL)
+        await asyncio.sleep(mytime)
 
 
 async def main():
