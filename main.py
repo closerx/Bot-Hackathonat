@@ -2,16 +2,25 @@ import asyncio
 import httpx
 from pyrogram import Client
 
+# البيانات الأساسية
 API_ID = 14762571
 API_HASH = "26d1cacfb046cb168dce4cd7c3d1208f"
+
+# ضع النص المترجم للجلسة (Session String) المستخرج من جهازك هنا بين التنصيص
+SESSION_STRING = "ضع_هنا_نص_الـ_session_string_الخاص_بك"
+
 N8N_WEBHOOK_URL = "https://cst-n8n-8ae0ef0c-5bd3b69f.cloud-station.app/webhook/data"
-
 TARGET_CHANNELS = ["Haymant2030", "urpath_uni", "hakathonat", "Sudie2030KSA"]
-DESTINATION_GROUP = "hackersksa"  # المعرف الخاص بالقروب المستهدف
-
+DESTINATION_GROUP = "hackersksa"
 FETCH_INTERVAL = 12 * 60 * 60  # كل 12 ساعة
-SESSION_STRING = "AQDhQksAvouTovJfShP4wdY-Qu1D6aVq0F1vLZO8MRJRHO6gTw1B1de3c9FqyLpU9KFkUA_cQmwhNaEB80ey2ijty29gmAEk0ELNPjPZr7r8HQIc9ZZ7lwTIzOn--HiGMgQ0qglTf7FKmxjmpCCzgObnsz0QOCkNKpmyUYblMcEm18rmN6M4B7u2sKSUIBJ5f1zVINE_S-1kQBg-bdKPS3m4Yx4DxeiF6iYCknBFdwSw_SFdQbuWQZ8NtdQBHLgUsa92qWe-UmBH7reCImMw7qzsoRgx8XUpGBLeWok3Nnh8j_hDGaA-MLasUA_XmNNC5m4muml_kUQS02xYrxwStoR3GchduAAAAABUTfzIAA"
-app = Client("my_tele_session", api_id=API_ID, api_hash=API_HASH, session_string=SESSION_STRING)
+
+# إنشاء العميل باستخدام session_string المباشرة
+app = Client(
+    "railway_session",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    session_string=SESSION_STRING
+)
 
 async def fetch_and_send_to_n8n():
     all_messages_payload = []
@@ -32,14 +41,14 @@ async def fetch_and_send_to_n8n():
                             elif entity.type.name == "URL" and message.caption:
                                 extracted_link = message.caption[entity.offset : entity.offset + entity.length]
 
-                    # 1. إرسال/نسخ الرسالة والصورة مباشرة إلى القروب المستهدف
+                    # 1. نسخ الرسالة والصورة وإرسالها للقروب
                     forwarded_msg = await app.copy_message(
                         chat_id=DESTINATION_GROUP,
                         from_chat_id=channel,
                         message_id=message.id
                     )
 
-                    # 2. بناء رابط الرسالة في القروب الجديد (إن أردت استخدامه في n8n)
+                    # 2. بناء رابط الرسالة في القروب
                     forwarded_msg_link = f"https://t.me/{DESTINATION_GROUP}/{forwarded_msg.id}"
 
                     msg_data = {
@@ -56,13 +65,13 @@ async def fetch_and_send_to_n8n():
                     all_messages_payload.append(msg_data)
                     found_photo = True
                     
-                    print(f"==================================================")
+                    print("==================================================")
                     print(f"📌 القناة الأصلية: @{channel}")
                     print(f"🆔 رقم الرسالة الأصلية: {message.id}")
                     print(f"📤 تم نسخ الصورة وإرسالها لـ @{DESTINATION_GROUP} بنجاح!")
                     print(f"🔗 رابط الرسالة في القروب: {forwarded_msg_link}")
                     print(f"📝 الوصف: {caption_text[:60]}...")
-                    print(f"==================================================\n")
+                    print("==================================================\n")
                     
                     break
 
@@ -97,7 +106,7 @@ async def worker():
         except Exception as e:
             print(f"❌ حدث خطأ غير متوقع: {e}")
 
-        print(f"⏳ الانتظار لمدة 12 ساعة قبل الدورة القادمة...")
+        print("⏳ الانتظار لمدة 12 ساعة قبل الدورة القادمة...")
         await asyncio.sleep(FETCH_INTERVAL)
 
 async def main():
@@ -110,6 +119,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-
-
