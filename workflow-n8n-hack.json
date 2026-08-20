@@ -1,0 +1,219 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        32,
+        -992
+      ],
+      "id": "82632c30-ddc4-4abb-b003-82ff6fe2ef5b",
+      "name": "Webhook1",
+      "webhookId": "c97cf30b-24d3-4df8-b45d-4119dc226f4a"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "Hackathonat",
+        "remoteJid": "120363428826398979@g.us",
+        "messageText": "={{ $json.text }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api-en.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        48,
+        -528
+      ],
+      "id": "a5d7e8a6-08d8-45d7-b3b6-28e20cd10c39",
+      "name": "Send text",
+      "credentials": {
+        "evolutionApi": {
+          "id": "9LeOLh2sfZruakkc",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// استخراج مصفوفة البيانات من جسم الـ Webhook\nconst rawData = $input.first().json.body || [];\n\nlet combinedText = \"📌 *جديد التحديثات*\\n\";\ncombinedText += \"───────────────────\\n\\n\";\n\nlet validCount = 0;\n\nrawData.forEach((item) => {\n  // يتجاهل الرسائل الفارغة التي لا تحتوي على وصف\n  if (item.description && item.description.trim() !== \"\") {\n    validCount++;\n    \n    // تم حذف سطر القناة من هنا\n    combinedText += `📝 *الوصف:*\\n${item.description.trim()}\\n`;\n    \n    if (item.link && item.link.trim() !== \"\") {\n      combinedText += `\\n🔗 *الرابط:* ${item.link.trim()}\\n`;\n    }\n    \n    combinedText += \"\\n───────────────────\\n\\n\";\n  }\n});\n\n// في حال عدم وجود أي محتوى نصي\nif (validCount === 0) {\n  combinedText = \"⚠️ لا توجد تحديثات نصية جديدة في هذه الدورة.\";\n}\n\n// إرجاع عنصر واحد يحتوي على النص الجاهز للإرسال\nreturn [\n  {\n    json: {\n      text: combinedText.trim()\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        48,
+        -768
+      ],
+      "id": "a2340f18-d000-419b-ad0d-2bc3ba418fa9",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "operation": "send-image",
+        "instanceName": "Hackathonat",
+        "remoteJid": "120363428826398979@g.us",
+        "media": "={{ $('HTTP Request').item.binary.data.directory}}",
+        "caption": "=",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api-en.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        688,
+        -1536
+      ],
+      "id": "2c30a509-4231-4354-8894-3de6c8a36e55",
+      "name": "Send image",
+      "credentials": {
+        "evolutionApi": {
+          "id": "9LeOLh2sfZruakkc",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        64,
+        -1296
+      ],
+      "id": "124fd952-1e14-49cd-ad69-b45beca3cb22",
+      "name": "Telegram Trigger",
+      "webhookId": "a11c468c-5e3f-46ba-af5e-f2fa6fb70c6a",
+      "credentials": {
+        "telegramApi": {
+          "id": "fF2EEYNEL9a5r1F8",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.photo.last().file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        -1184
+      ],
+      "id": "8630f37e-2063-4966-af5b-ed041e8db5fc",
+      "name": "Get a file",
+      "webhookId": "55fc16ad-3ff2-4cab-891d-0b2b2d470043",
+      "credentials": {
+        "telegramApi": {
+          "id": "fF2EEYNEL9a5r1F8",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/file/bot7914362464:AAFG1mJ4zl95wESsfXqYmfNHozkvVwZbvEs/photos/{{ $json.result.file_path.replace('photos/', '') }}\n",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        496,
+        -1312
+      ],
+      "id": "e37546d7-3eed-4bc4-86ca-7c2132ee30d1",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Send text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "06acbb4e-1241-48de-90c0-a32a91301ffa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "aadad75e31f46166594c47ae33006542da2341b687874d5515d48b8746a7524d"
+  },
+  "nodeGroups": [],
+  "id": "hQipDprv9BVIXUwV",
+  "tags": []
+}
