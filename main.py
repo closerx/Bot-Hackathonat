@@ -14,7 +14,7 @@ SESSION_STRING = "AQDhQksAvouTovJfShP4wdY-Qu1D6aVq0F1vLZO8MRJRHO6gTw1B1de3c9FqyL
 TARGET_CHANNELS = ["Haymant2030", "urpath_uni", "hakathonat", "Sudie2030KSA"]
 
 # 
-FETCH_INTERVAL = 3600
+FETCH_INTERVAL = 1*60
 
 # تم إضافة session_string هنا لمنع المطالبة بالهاتف والتوقف
 app = Client(
@@ -96,13 +96,13 @@ async def worker():
         except Exception as e:
             print(f"❌ حدث خطأ غير متوقع أثناء الدورة: {e}")
 
-        print(f"⏳ سيكرر الكود الفحص بعد {FETCH_INTERVAL // 60} دقائق...")
-        await asyncio.sleep(FETCH_INTERVAL // 60)
+        print(f"⏳ سيكرر الكود الفحص بعد {FETCH_INTERVAL} دقائق...")
+        await asyncio.sleep(FETCH_INTERVAL)
 
 
 async def main():
     await app.start()
-    print("🚀 تم الاتصال بـ Telegram بنجاح! البوت يعمل الآن...")
+    print("🚀 تم الاتصال بـ  بنجاح! البوت يعمل الآن...")
     try:
         await worker()
     finally:
