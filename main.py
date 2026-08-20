@@ -7,8 +7,7 @@ API_ID = 14762571
 API_HASH = "26d1cacfb046cb168dce4cd7c3d1208f"
 
 # ضع النص المترجم للجلسة (Session String) المستخرج من جهازك هنا بين التنصيص
-SESSION_STRING = "ضع_هنا_نص_الـ_session_string_الخاص_بك"
-
+SESSION_STRING = "AQDhQksAKUA_ab1RrMW9YzvSOlQvpy3vQmbLHIjzLKKde9nxldLPYmsE38V90MwodeMpOhTQW02b1EpZGBWl1VGiKFA-b4d-ZOLIInnEEsPmPfEdzUmfroHC0DbnDN8x6cd75GcJ80gjXL0EJ-JaM99sBNRMtxcOytduHlTTDyHfL4blHNK-4ePJ5U12EodRP0F6Ft_EXMe3HrMNst0bRJdAJqKp5qtQy7P02GzVYKoNA9UvmjoUr8TS0kgCDcOPu0weCZmO4rdkucZxVdCJGOjbMHG1SeeQU1GE2LABBYDxmGIbFx853fWi-gUuYbiNj42jSt_5ybbNXIrxZaVWapYfTDSSpQAAAABUTfzIAA"
 N8N_WEBHOOK_URL = "https://cst-n8n-8ae0ef0c-5bd3b69f.cloud-station.app/webhook/data"
 TARGET_CHANNELS = ["Haymant2030", "urpath_uni", "hakathonat", "Sudie2030KSA"]
 DESTINATION_GROUP = "hackersksa"
