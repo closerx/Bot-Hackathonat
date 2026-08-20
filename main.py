@@ -13,8 +13,8 @@ SESSION_STRING = "AQDhQksAvouTovJfShP4wdY-Qu1D6aVq0F1vLZO8MRJRHO6gTw1B1de3c9FqyL
 
 TARGET_CHANNELS = ["Haymant2030", "urpath_uni", "hakathonat", "Sudie2030KSA"]
 
-# مدة الانتظار: دقيقتين (120 ثانية)
-FETCH_INTERVAL = 2 * 60
+# 
+FETCH_INTERVAL = 3600
 
 # تم إضافة session_string هنا لمنع المطالبة بالهاتف والتوقف
 app = Client(
@@ -97,7 +97,7 @@ async def worker():
             print(f"❌ حدث خطأ غير متوقع أثناء الدورة: {e}")
 
         print(f"⏳ سيكرر الكود الفحص بعد {FETCH_INTERVAL // 60} دقائق...")
-        await asyncio.sleep(FETCH_INTERVAL)
+        await asyncio.sleep(FETCH_INTERVAL // 60)
 
 
 async def main():
