@@ -10,8 +10,8 @@ TARGET_CHANNELS = ["Haymant2030", "urpath_uni", "hakathonat", "Sudie2030KSA"]
 DESTINATION_GROUP = "hackersksa"  # المعرف الخاص بالقروب المستهدف
 
 FETCH_INTERVAL = 12 * 60 * 60  # كل 12 ساعة
-
-app = Client("my_tele_session", api_id=API_ID, api_hash=API_HASH)
+SESSION_STRING = "AQDhQksAvouTovJfShP4wdY-Qu1D6aVq0F1vLZO8MRJRHO6gTw1B1de3c9FqyLpU9KFkUA_cQmwhNaEB80ey2ijty29gmAEk0ELNPjPZr7r8HQIc9ZZ7lwTIzOn--HiGMgQ0qglTf7FKmxjmpCCzgObnsz0QOCkNKpmyUYblMcEm18rmN6M4B7u2sKSUIBJ5f1zVINE_S-1kQBg-bdKPS3m4Yx4DxeiF6iYCknBFdwSw_SFdQbuWQZ8NtdQBHLgUsa92qWe-UmBH7reCImMw7qzsoRgx8XUpGBLeWok3Nnh8j_hDGaA-MLasUA_XmNNC5m4muml_kUQS02xYrxwStoR3GchduAAAAABUTfzIAA"
+app = Client("my_tele_session", api_id=API_ID, api_hash=API_HASH, SESSION_STRING)
 
 async def fetch_and_send_to_n8n():
     all_messages_payload = []
