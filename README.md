@@ -50,7 +50,7 @@
     - `API_HASH`
     - `SESSION_STRING`
     - `N8N_WEBHOOK_URL`
-3. تأكد من إضافة ملف `runtime.txt` يحتوي على `python-3.11.9` لضمان التوافق.
+  
 
 ### ثانياً: إعداد n8n Workflow
 1. أنشئ Workflow جديد.
