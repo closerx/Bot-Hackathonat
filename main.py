@@ -12,7 +12,7 @@ N8N_WEBHOOK_URL = "https://cst-n8n-8ae0ef0c-5bd3b69f.cloud-station.app/webhook/d
 
 TARGET_CHANNELS = ["Haymant2030", "urpath_uni", "hakathonat", "Sudie2030KSA"]
 DESTINATION_GROUP = "hackersksa"
-FETCH_INTERVAL = 12 * 60 * 60  # كل 12 ساعة
+FETCH_INTERVAL = 2 * 60  # كل 12 ساعة
 
 # قاموس لتتبع آخر ID تم معالجته لكل قناة لمنع التكرار
 LAST_PROCESSED_IDS = {channel: 0 for channel in TARGET_CHANNELS}
