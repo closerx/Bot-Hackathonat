@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 import httpx
 from pyrogram import Client
 
@@ -17,7 +17,7 @@ FETCH_INTERVAL = 2 * 60  # كل 12 ساعة
 # قاموس لتتبع آخر ID تم معالجته لكل قناة لمنع التكرار
 LAST_PROCESSED_IDS = {channel: 0 for channel in TARGET_CHANNELS}
 
-# إنشاء العميل باستخدام session_string المباشرة
+# إنشاء العميل
 app = Client(
     "railway_session",
     api_id=API_ID,
@@ -29,8 +29,8 @@ app = Client(
 async def fetch_and_send_to_n8n():
     all_messages_payload = []
     
-    # حد الوقت: فقط الرسائل المنشورة خلال الـ 12 ساعة الأخيرة
-    time_threshold = datetime.now(timezone.utc) - timedelta(hours=12)
+    # استخدام datetime.utcnow() ليطابق نوع توقيت Pyrogram (Naive UTC)
+    time_threshold = datetime.utcnow() - timedelta(hours=12)
 
     for channel in TARGET_CHANNELS:
         new_photos_count = 0
@@ -41,16 +41,16 @@ async def fetch_and_send_to_n8n():
             messages = []
             # جلب أحدث 100 رسالة للفحص
             async for message in app.get_chat_history(channel, limit=100):
-                # إذا وصلنا لرسالة أقدم من 12 ساعة وفي الدورة الأولى، نتوقف عن الفحص لتوفير الموارد
+                # مقارنة التواريخ بعد توحيد نوعها
                 if message.date < time_threshold and last_id == 0:
                     break
                 messages.append(message)
 
-            # ترتيب الرسائل تصاعدياً (من القديم إلى الجديد) لإرسالها بالترتيب الزمني الصحيح
+            # ترتيب الرسائل تصاعدياً (من القديم إلى الجديد)
             messages.reverse()
 
             for message in messages:
-                # الشرط: تحتوي على صورة + أن تكون أحدث من آخر رسالة جرى فحصها + نُشرت خلال الـ 12 ساعة الأخيرة
+                # الشرط: تحتوي على صورة + أحدث من آخر رسالة جرى فحصها + نُشرت خلال الـ 12 ساعة الأخيرة
                 if message.photo and message.id > last_id and message.date >= time_threshold:
                     caption_text = message.caption or "بدون وصف"
 
@@ -89,7 +89,6 @@ async def fetch_and_send_to_n8n():
                     all_messages_payload.append(msg_data)
                     new_photos_count += 1
 
-                    # تحديث أعلى ID تم الوصول إليه في هذه الدورة
                     if message.id > highest_id_in_this_run:
                         highest_id_in_this_run = message.id
 
@@ -99,10 +98,8 @@ async def fetch_and_send_to_n8n():
                     print(f"📅 تاريخ النشر: {message.date}")
                     print(f"📤 تم نسخ الصورة وإرسالها لـ @{DESTINATION_GROUP} بنجاح!")
                     print(f"🔗 رابط الرسالة في القروب: {forwarded_msg_link}")
-                    print(f"📝 الوصف: {caption_text[:60]}...")
                     print("==================================================\n")
 
-            # تحديث السجل برقم أحدث رسالة تم معالجتها بالقناة
             if highest_id_in_this_run > last_id:
                 LAST_PROCESSED_IDS[channel] = highest_id_in_this_run
 
